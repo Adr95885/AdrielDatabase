@@ -3,33 +3,28 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'YOUR_GITHUB_REPO_URL'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                bat 'pip install flask'
+                bat 'pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'python -m unittest discover tests -v'
+                bat 'python -m unittest discover tests -v'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t task-app .'
+                bat 'docker build -t task-app .'
             }
         }
 
         stage('Deploy to Staging') {
             steps {
-                sh 'docker run -d -p 5001:5000 task-app'
+                bat 'docker run -d -p 5001:5000 task-app'
             }
         }
 
@@ -41,7 +36,7 @@ pipeline {
 
         stage('Deploy to Production') {
             steps {
-                sh 'docker run -d -p 5000:5000 task-app'
+                bat 'docker run -d -p 5000:5000 task-app'
             }
         }
     }
